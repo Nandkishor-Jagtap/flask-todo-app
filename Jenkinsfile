@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        PYTHON_PATH = 'C:\\Users\\NANDKISHOR\\AppData\\Local\\Programs\\Python\\Python311\\python.exe'
+        // Update this to your system-wide Python path
+        PYTHON_PATH = 'C:\\Program Files\\Python311\\python.exe'
     }
 
     stages {
@@ -16,16 +17,16 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing Python dependencies'
-                // Upgrade pip safely
+                // Check if Python exists and install packages
                 bat """
-                    if exist "${env.PYTHON_PATH}" (
-                        "${env.PYTHON_PATH}" -m pip install --upgrade pip
-                        "${env.PYTHON_PATH}" -m pip install --upgrade setuptools wheel
-                        "${env.PYTHON_PATH}" -m pip install -r requirements.txt
-                    ) else (
-                        echo Python executable not found at ${env.PYTHON_PATH}
-                        exit 1
-                    )
+                if exist "${env.PYTHON_PATH}" (
+                    "${env.PYTHON_PATH}" -m pip install --upgrade pip
+                    "${env.PYTHON_PATH}" -m pip install --upgrade setuptools wheel
+                    "${env.PYTHON_PATH}" -m pip install -r requirements.txt
+                ) else (
+                    echo Python executable not found at ${env.PYTHON_PATH}
+                    exit 1
+                )
                 """
             }
         }
@@ -33,24 +34,11 @@ pipeline {
         stage('Run Flask App') {
             steps {
                 echo 'Starting Flask App'
-                // Kill previous Python process if running (ignore errors)
+                // Kill any previous Python process
                 bat 'taskkill /F /IM python.exe /T || exit 0'
-
-                // Start Flask app in a new background window
-                bat """
-                    start "" cmd /c "${env.PYTHON_PATH} app.py"
-                    echo Flask app started in background
-                """
+                // Start Flask app in background
+                bat "start cmd /c \"${env.PYTHON_PATH} app.py\""
             }
-        }
-    }
-
-    post {
-        failure {
-            echo 'Build failed! Check logs for details.'
-        }
-        success {
-            echo 'Build completed successfully!'
         }
     }
 }
