@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Update this to your system-wide Python path
-        PYTHON_PATH = 'C:\\Program Files\\Python311\\python.exe'
+        PYTHON_PATH = '"C:\\Program Files\\Python311\\python.exe"'
     }
 
     stages {
@@ -17,27 +16,21 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing Python dependencies'
-                // Check if Python exists and install packages
-                bat """
-                if exist "${env.PYTHON_PATH}" (
-                    "${env.PYTHON_PATH}" -m pip install --upgrade pip
-                    "${env.PYTHON_PATH}" -m pip install --upgrade setuptools wheel
-                    "${env.PYTHON_PATH}" -m pip install -r requirements.txt
-                ) else (
-                    echo Python executable not found at ${env.PYTHON_PATH}
-                    exit 1
-                )
-                """
+                // Upgrade pip, setuptools, and wheel
+                bat "${env.PYTHON_PATH} -m pip install --upgrade pip"
+                bat "${env.PYTHON_PATH} -m pip install --upgrade setuptools wheel"
+                // Install requirements
+                bat "${env.PYTHON_PATH} -m pip install -r requirements.txt"
             }
         }
 
         stage('Run Flask App') {
             steps {
                 echo 'Starting Flask App'
-                // Kill any previous Python process
+                // Kill previous Python process if running
                 bat 'taskkill /F /IM python.exe /T || exit 0'
                 // Start Flask app in background
-                bat "start cmd /c \"${env.PYTHON_PATH} app.py\""
+                bat "start cmd /c ${env.PYTHON_PATH} app.py"
             }
         }
     }
