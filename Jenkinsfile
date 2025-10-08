@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        PYTHON_PATH = '"C:\\Program Files\\Python311\\python.exe"'
-    }
-
     stages {
         stage('Pull Code') {
             steps {
@@ -16,22 +12,25 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing Python dependencies'
-                // Upgrade pip, setuptools, and wheel
-                bat "${env.PYTHON_PATH} -m pip install --upgrade pip"
-                bat "${env.PYTHON_PATH} -m pip install --upgrade setuptools wheel"
-                // Install requirements
-                bat "${env.PYTHON_PATH} -m pip install -r requirements.txt"
+                bat '''
+                python --version
+                python -m pip install --upgrade pip
+                python -m pip install --upgrade setuptools wheel
+                python -m pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run Flask App') {
             steps {
-                echo 'Starting Flask App'
-                // Kill previous Python process if running
-                bat 'taskkill /F /IM python.exe /T || exit 0'
-                // Start Flask app in background
-                bat "start cmd /c ${env.PYTHON_PATH} app.py"
+                echo 'Starting Flask application...'
+                bat '''
+                set FLASK_APP=app.py
+                set FLASK_ENV=development
+                python app.py
+                '''
             }
         }
     }
 }
+
