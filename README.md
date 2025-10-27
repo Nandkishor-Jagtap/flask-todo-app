@@ -70,10 +70,9 @@ flask-todo-app/
 ├── app.py
 ├── requirements.txt
 ├── templates/
-│   ├── index.html
-│   └── base.html
+│ ├── index.html
+│ └── base.html
 ├── static/
-│   ├── style.css
-│   └── script.js
+│ ├── style.css
+│ └── script.js
 └── Jenkinsfile
-
