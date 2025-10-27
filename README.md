@@ -65,14 +65,5 @@ Running the Flask application automatically
 The pipeline also ensures only one build runs at a time using disableConcurrentBuilds() — so new commits stop the previous pipeline before starting a new one.
 
 🧩 Folder Structure:
-flask-todo-app/
-│
-├── app.py
-├── requirements.txt
-├── templates/
-│ ├── index.html
-│ └── base.html
-├── static/
-│ ├── style.css
-│ └── script.js
-└── Jenkinsfile
+## Folder structure
+<pre> <pre> flask-todo-app/ ├── app.py ├── requirements.txt ├── templates/ │ ├── index.html │ └── base.html ├── static/ │ ├── style.css │ └── script.js └── Jenkinsfile </pre> </pre>
