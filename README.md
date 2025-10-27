@@ -67,5 +67,14 @@ The pipeline also ensures only one build runs at a time using disableConcurrentB
 🧩 Folder Structure:
 ## Folder structure
 ```
-flask-todo-app/ ├── app.py ├── requirements.txt ├── templates/ │ ├── index.html │ └── base.html ├── static/ │ ├── style.css │ └── script.js └── Jenkinsfile 
+flask-todo-app/
+├── app.py
+├── requirements.txt
+├── templates/
+│ ├── index.html
+│ └── base.html
+├── static/
+│ ├── style.css
+│ └── script.js
+└── Jenkinsfile 
 ```
